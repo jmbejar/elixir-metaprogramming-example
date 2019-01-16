@@ -1,7 +1,19 @@
 defmodule ScholarMath do
-  defmacro draw({operator, _meta, [lhs, rhs]}) do
+  defmacro __using__(_options) do
     quote do
-      draw_math(unquote(operator), unquote(lhs), unquote(rhs))
+      import unquote(__MODULE__)
+    end
+  end
+
+  defmacro draw({operator, _meta, [lhs, rhs]}) do
+    function_name = String.to_atom(
+      "draw " <> Atom.to_string(operator) <> Integer.to_string(lhs) <> Integer.to_string(rhs)
+    )
+
+    quote do
+      def unquote(function_name)() do
+        draw_math(unquote(operator), unquote(lhs), unquote(rhs))
+      end
     end
   end
 

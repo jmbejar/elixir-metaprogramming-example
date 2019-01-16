@@ -1,8 +1,6 @@
 defmodule Example do
-  import ScholarMath
+  use ScholarMath
 
-  def run do
-    draw 2 + 3
-    draw 2 * 3
-  end
+  draw 2 + 3
+  draw 2 * 3
 end
