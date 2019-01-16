@@ -2,6 +2,10 @@ defmodule ScholarMath do
   defmacro __using__(_options) do
     quote do
       import unquote(__MODULE__)
+
+      @functions []
+
+      @before_compile unquote(__MODULE__)
     end
   end
 
@@ -11,8 +15,21 @@ defmodule ScholarMath do
     )
 
     quote do
+      @functions [unquote(function_name) | @functions]
+
       def unquote(function_name)() do
         draw_math(unquote(operator), unquote(lhs), unquote(rhs))
+      end
+    end
+  end
+
+  defmacro __before_compile__(_env) do
+    quote do
+      def run do
+        Enum.each @functions, fn name ->
+          IO.puts "Running #{name}"
+          apply(__MODULE__, name, [])
+        end
       end
     end
   end
@@ -23,6 +40,7 @@ defmodule ScholarMath do
       + #{rhs}
         --
         #{lhs+rhs}
+
       """
   end
 
